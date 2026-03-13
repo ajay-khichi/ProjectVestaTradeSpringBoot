@@ -1,5 +1,6 @@
 package com.ignishers.controller;
 
+import java.io.File;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ignishers.daoimpl.CustomerDaoImpl;
@@ -34,8 +36,6 @@ public class LoginController {
 	
 	@Autowired
 	private StockDaoImpl stockdao;
-	 @Autowired
-	 private MailSender sender;
 
 	@GetMapping("/logout")
     public String logout(HttpSession session) {
@@ -103,6 +103,7 @@ public class LoginController {
 			if(u.getRole().equals(Role.CUSTOMER)) {
 				if(u.getAccountStatus().equals(AccountStatus.VERIFIED)) {
 					session.setAttribute("user", u);
+					MailSender.sendMailLoginAlert(u);
 					mv = new ModelAndView("customerhome", "welcome", "Welcome User");
 					mv.addObject("stocks", lst);
 				}
@@ -120,11 +121,18 @@ public class LoginController {
 	}
 	
 	@PostMapping("/register")
-	public ModelAndView registerUser(Customer cst) throws Exception
+	public ModelAndView registerUser(Customer cst,
+			@RequestParam("dp") MultipartFile file) throws Exception
 	{
+		System.out.println("File size: " + file.getSize());
 		ModelAndView mv = null;
+		
+		cst.setImgPath(file.getOriginalFilename());
+		String serverfile = "D:\\Java Projects\\Project\\ProjectVestaTradeSpringBoot\\src\\main\\webapp\\dp\\";
+		File f = new File(serverfile+file.getOriginalFilename());
 		if(cstdao.addCustomer(cst)) {
-			sender.sendMailForRegister(cst);
+			MailSender.sendMailForRegister(cst);
+			file.transferTo(f);
 			mv = new ModelAndView("login", "msg", "Registration Successfull Wait for approval.");
 		}
 		else

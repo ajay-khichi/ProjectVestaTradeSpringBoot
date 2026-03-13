@@ -4,6 +4,8 @@ import java.util.Properties;
 
 import org.springframework.stereotype.Component;
 
+import com.ignishers.pojo.FundTransaction;
+import com.ignishers.pojo.Order;
 import com.ignishers.pojo.User;
 
 import jakarta.mail.Authenticator;
@@ -55,6 +57,52 @@ public class MailSender {
 			String msg = "<p>Dear <strong>" + a.getFirstName()+",<br>"
 					+ "Your Account is Created Successfully</strong>, and Pending for Approval.</p>"
 					+ "<p>Wait for 3 to 4 Days.</p>"
+					+ "<br><br><h2>Thank You for Register with Us.</h2><br><br><br>"
+					+ "<h1 style=\"color: #000; font-weight: bold;\">Team Vesta<span style=\"color: #ff5733; font-weight: normal;\">Trade</span></h1>";
+			
+			message.setContent(msg, "text/html");
+			Transport.send(message);
+			
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+//--------------------------------------------------------------------------------------------------------------------------
+	public static void sendMailLoginAlert(User a) {
+		/* send email for login alert 
+		 * 
+		 * 
+		 * 
+		 */
+		
+		
+		Properties props=new Properties();
+		props.put("mail.smtp.host", "smtp.gmail.com");
+		props.put("mail.smtp.port", "587");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.starttls.enable", "true");
+		
+		
+		
+		Session session=Session.getInstance(props, new Authenticator() {
+			@Override
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(fromEmail, pass);
+			}
+		});
+		try {
+			Message message=new MimeMessage(session);
+			message.setFrom(new InternetAddress(fromEmail));
+			
+			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(a.getEmail()));
+			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("ajaysinghkhichi5@gmail.com"));
+			
+			
+			message.setSubject("Login Initiated on VestraTrade");
+			String msg = "<p>Dear <strong>" + a.getFirstName()+",<br>"
+					+ "Your Account is Loggedin by someone</strong>, if not Done by You.</p>"
+					+ "<p>Contact Us to Secure your Account.</p>"
 					+ "<br><br><h2>Thank You for Register with Us.</h2><br><br><br>"
 					+ "<h1 style=\"color: #000; font-weight: bold;\">Team Vesta<span style=\"color: #ff5733; font-weight: normal;\">Trade</span></h1>";
 			
@@ -207,47 +255,196 @@ public static void sendMailAfterVerify(User a) {
 			}
 		}
 //--------------------------------------------------------------------------------------------------------------------------
-		public static void sendMailDeposit(User a, Double amount) {
-			/* 
-			 * 
-			 * send email after deposit amount to wallet by user
-			 * 
-			 */
-				
-				
-				Properties props=new Properties();
-				props.put("mail.smtp.host", "smtp.gmail.com");
-				props.put("mail.smtp.port", "587");
-				props.put("mail.smtp.auth", "true");
-				props.put("mail.smtp.starttls.enable", "true");
-				
-				
-				
-				Session session=Session.getInstance(props, new Authenticator() {
-					@Override
-					protected PasswordAuthentication getPasswordAuthentication() {
-						return new PasswordAuthentication(fromEmail, pass);
-					}
-				});
-				try {
-					Message message=new MimeMessage(session);
-					message.setFrom(new InternetAddress(fromEmail));
-					
-					message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(a.getEmail()));
-					message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("ajaysinghkhichi5@gmail.com"));
-					
-					
-					message.setSubject("Amount Credited in Wallet");
-					String msg = "<p>Dear <strong>" + a.getFirstName()+",<br>"
-							+ "<p>This Mail is to Inform You That Your<strong> Amount is Credited on you</strong>, because of Some Suspicious Activity Done By Your Account.</p>"
-							+ "<br><br><h2>Contact Us for more Information</h2><br><br><br>"
-							+ "<h1 style=\"color: #000080; font-weight: bold;\">Team Vesta<span style=\"color: #000; font-weight: normal;\">Trade</span></h1>";
-					
-					message.setContent(msg, "text/html");
-					Transport.send(message);
-					
-				} catch (Exception e) {
-					throw new RuntimeException(e);
+	public static void sendMailDeposit(User a, FundTransaction trans) {
+		/* 
+		 * 
+		 * send email after deposit amount to wallet by user
+		 * 
+		 */
+			
+			
+			Properties props=new Properties();
+			props.put("mail.smtp.host", "smtp.gmail.com");
+			props.put("mail.smtp.port", "587");
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.starttls.enable", "true");
+			
+			
+			
+			Session session=Session.getInstance(props, new Authenticator() {
+				@Override
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication(fromEmail, pass);
 				}
+			});
+			try {
+				Message message=new MimeMessage(session);
+				message.setFrom(new InternetAddress(fromEmail));
+				
+				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(a.getEmail()));
+				message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("ajaysinghkhichi5@gmail.com"));
+				
+				
+				message.setSubject("Amount Credited in Wallet");
+				String msg = "<p>Dear <strong>" + a.getFirstName()+",<br>"
+						+ "<p>This Mail is to Inform You That Your<strong> Amount is Credited on Your Wallet</strong>.</p>"
+						+ "<p>Transaction Amount: </p>" + trans.getAmount()
+						+ "<p>Transaction Date: </p>" + trans.getCreatedAt()
+						+ "<p>Transaction Id: </p>" + trans.getId()
+						+ "<br><br><h2>Contact Us for more Information</h2><br><br><br>"
+						+ "<h1 style=\"color: #000080; font-weight: bold;\">Team Vesta<span style=\"color: #000; font-weight: normal;\">Trade</span></h1>";
+				
+				message.setContent(msg, "text/html");
+				Transport.send(message);
+				
+			} catch (Exception e) {
+				throw new RuntimeException(e);
 			}
+		}
+	
+//--------------------------------------------------------------------------------------------------------------------------
+	public static void sendMailWithDraw(User a, FundTransaction trans) {
+		/* 
+		 * 
+		 * send email after Withdraw amount from wallet by user
+		 * 
+		 */
+			
+			
+			Properties props=new Properties();
+			props.put("mail.smtp.host", "smtp.gmail.com");
+			props.put("mail.smtp.port", "587");
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.starttls.enable", "true");
+			
+			
+			
+			Session session=Session.getInstance(props, new Authenticator() {
+				@Override
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication(fromEmail, pass);
+				}
+			});
+			try {
+				Message message=new MimeMessage(session);
+				message.setFrom(new InternetAddress(fromEmail));
+				
+				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(a.getEmail()));
+				message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("ajaysinghkhichi5@gmail.com"));
+				
+				
+				message.setSubject("Amount Debited from Wallet");
+				String msg = "<p>Dear <strong>" + a.getFirstName()+",<br>"
+						+ "<p>This Mail is to Inform You That Your<strong> Amount is Debited from Your Wallet</strong>.</p>"
+						+ "<p>Transaction Amount: </p>" + trans.getAmount()
+						+ "<p>Transaction Date: </p>" + trans.getCreatedAt()
+						+ "<p>Transaction Id: </p>" + trans.getId()
+						+ "<br><br><h2>Contact Us for more Information</h2><br><br><br>"
+						+ "<h1 style=\"color: #000080; font-weight: bold;\">Team Vesta<span style=\"color: #000; font-weight: normal;\">Trade</span></h1>";
+				
+				message.setContent(msg, "text/html");
+				Transport.send(message);
+				
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+	
+//--------------------------------------------------------------------------------------------------------------------------
+	public static void sendMailBuyStock(User a, Order order) {
+		/* 
+		 * 
+		 * send email after Buying Stocks
+		 * 
+		 */
+			
+			
+			Properties props=new Properties();
+			props.put("mail.smtp.host", "smtp.gmail.com");
+			props.put("mail.smtp.port", "587");
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.starttls.enable", "true");
+			
+			
+			
+			Session session=Session.getInstance(props, new Authenticator() {
+				@Override
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication(fromEmail, pass);
+				}
+			});
+			try {
+				Message message=new MimeMessage(session);
+				message.setFrom(new InternetAddress(fromEmail));
+				
+				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(a.getEmail()));
+				message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("ajaysinghkhichi5@gmail.com"));
+				
+				
+				message.setSubject("Stock Bought Successfully");
+				String msg = "<p>Dear <strong>" + a.getFirstName()+",<br>"
+						+ "<p>This Mail is to Inform You That Your<strong> Stocks are Bought Successfully</strong>.</p>"
+						+ "<p>Stock Id: </p>" + order.getStockId()
+						+ "<p>Stock Quantity: </p>" + order.getQuantity()
+						+ "<p>Stock Amount: </p>" + order.getTotalAmount()
+						+ "<p>Stock Date: </p>" + order.getPlacedAt()
+						+ "<br><br><h2>Contact Us for more Information</h2><br><br><br>"
+						+ "<h1 style=\"color: #000080; font-weight: bold;\">Team Vesta<span style=\"color: #000; font-weight: normal;\">Trade</span></h1>";
+				
+				message.setContent(msg, "text/html");
+				Transport.send(message);
+				
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+	
+//--------------------------------------------------------------------------------------------------------------------------
+	public static void sendMailSellStock(User a, Order order) {
+		/* 
+		 * 
+		 * send email after Selling Stocks
+		 * 
+		 */
+			
+			
+		Properties props=new Properties();
+		props.put("mail.smtp.host", "smtp.gmail.com");
+		props.put("mail.smtp.port", "587");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.starttls.enable", "true");
+		
+		
+		
+		Session session=Session.getInstance(props, new Authenticator() {
+			@Override
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(fromEmail, pass);
+			}
+		});
+		try {
+			Message message=new MimeMessage(session);
+			message.setFrom(new InternetAddress(fromEmail));
+			
+			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(a.getEmail()));
+			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("ajaysinghkhichi5@gmail.com"));
+			
+			
+			message.setSubject("Stock Sold Successfully");
+			String msg = "<p>Dear <strong>" + a.getFirstName()+",<br>"
+					+ "<p>This Mail is to Inform You That Your<strong> Stocks are Sold Successfully</strong>.</p>"
+					+ "<p>Stock Id: </p>" + order.getStockId()
+					+ "<p>Stock Quantity: </p>" + order.getQuantity()
+					+ "<p>Stock Amount: </p>" + order.getTotalAmount()
+					+ "<p>Stock Date: </p>" + order.getPlacedAt()
+					+ "<br><br><h2>Contact Us for more Information</h2><br><br><br>"
+					+ "<h1 style=\"color: #000080; font-weight: bold;\">Team Vesta<span style=\"color: #000; font-weight: normal;\">Trade</span></h1>";
+			
+			message.setContent(msg, "text/html");
+			Transport.send(message);
+			
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

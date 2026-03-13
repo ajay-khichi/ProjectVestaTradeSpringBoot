@@ -26,35 +26,35 @@
 
             <div class="d-grid gap-2 col-6 mx-auto">
               <h2 class="heading">Customer Details</h2>
-              <% Customer u=(Customer)request.getAttribute("user"); %>
+              <% Customer usr=(Customer)request.getAttribute("user"); %>
                 <form action="amdcst" method="post">
                   <p class="section-tag mt-2">Personal Details</p>
                   <div class="row g-2">
                     <div class="col-12"><label class="form-label">Password *</label>
-                      <input type="text" name="password" value="<%=u.getPassword() %>" class="form-control" required />
+                      <input type="text" name="password" value="<%=usr.getPassword() %>" class="form-control" required />
                     </div>
                     <div class="col-6"><label class="form-label">First Name *</label>
-                      <input type="text" name="firstName" value="<%=u.getFirstName() %>" class="form-control"
+                      <input type="text" name="firstName" value="<%=usr.getFirstName() %>" class="form-control"
                         placeholder="Rahul" required />
                     </div>
 
                     <div class="col-6"><label class="form-label">Last Name *</label>
-                      <input type="text" name="lastName" value="<%=u.getLastName()%>" class="form-control"
+                      <input type="text" name="lastName" value="<%=usr.getLastName()%>" class="form-control"
                         placeholder="Kumar" required />
                     </div>
 
                     <div class="col-12"><label class="form-label">Email *</label>
-                      <input type="email" name="email" value="<%=u.getEmail()%>" class="form-control"
+                      <input type="email" name="email" value="<%=usr.getEmail()%>" class="form-control"
                         placeholder="rahul@email.com" required />
                     </div>
 
                     <div class="col-12"><label class="form-label">Mobile *</label>
-                      <input type="tel" name="mobile" value="<%=u.getMobile() %>" class="form-control"
+                      <input type="tel" name="mobile" value="<%=usr.getMobile() %>" class="form-control"
                         placeholder="9876543210" required pattern="[6-9][0-9]{9}" maxlength="10" />
                     </div>
 
                     <div class="col-12"><label class="form-label">Gender *</label>
-                      <input type="text" name="gender" value="<%=u.getGender() %>" class="form-control" required />
+                      <input type="text" name="gender" value="<%=usr.getGender() %>" class="form-control" required />
                     </div>
 
                   </div>
@@ -62,30 +62,30 @@
                   <p class="section-tag mt-3">KYC Details</p>
                   <div class="row g-2">
                     <div class="col-6"><label class="form-label">PAN *</label>
-                      <input type="text" name="pan" value="<%=u.getPan() %>" class="form-control"
+                      <input type="text" name="pan" value="<%=usr.getPan() %>" class="form-control"
                         placeholder="ABCDE1234F" required maxlength="10"
                         oninput="this.value=this.value.toUpperCase()" />
                     </div>
-
+					
                     <div class="col-6"><label class="form-label">Aadhaar *</label>
-                      <input type="text" name="aadhar" value="<%=u.getAadhar() %>" class="form-control"
+                      <input type="text" name="aadhar" value="<%=usr.getAadhar() %>" class="form-control"
                         placeholder="XXXX XXXX XXXX" required maxlength="14" oninput="formatAadhar(this)" />
                     </div>
-
+					</div>
                     <p class="section-tag mt-3">Financial Details</p>
                     <div class="row g-2">
                       <div class="col-6"><label class="form-label">Bank Account *</label>
-                        <input type="text" name="bankAccount" value="<%=u.getBankAccount() %>" class="form-control"
+                        <input type="text" name="bankAccount" value="<%=usr.getBankAccount() %>" class="form-control"
                           placeholder="Account number" required maxlength="18" />
                       </div>
 
                       <div class="col-6"><label class="form-label">IFSC Code *</label>
-                        <input type="text" name="ifscCode" value="<%=u.getIfscCode() %>" class="form-control"
+                        <input type="text" name="ifscCode" value="<%=usr.getIfscCode() %>" class="form-control"
                           placeholder="HDFC0001234" required maxlength="11"
                           oninput="this.value=this.value.toUpperCase()" />
                       </div>
                     </div>
-
+					
                  
                 </form>
 

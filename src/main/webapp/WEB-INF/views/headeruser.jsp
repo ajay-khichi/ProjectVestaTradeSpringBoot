@@ -1,5 +1,12 @@
+<%@page import="com.ignishers.pojo.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%    
+    User isuser = (User) session.getAttribute("user");
+if(isuser==null){
+	response.sendRedirect("login");
+}
+%>
 <nav class="navbar navbar-expand-lg">
   <div class="container">
     <a class="navbar-brand" href="customerhome">Vesta<span>Trade</span></a>

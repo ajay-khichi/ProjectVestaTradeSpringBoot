@@ -2,8 +2,7 @@ package com.ignishers.pojo;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
-
+import java.time.format.DateTimeFormatter;
 
 import com.ignishers.enums.OrderStatus;
 import com.ignishers.enums.OrderType;
@@ -143,8 +142,9 @@ public class Order {
 		this.totalAmount = totalAmount;
 	}
 
-	public LocalDateTime getPlacedAt() {
-		return placedAt;
+	public String getPlacedAt() {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+		return placedAt.format(formatter);
 	}
 
 	public void setPlacedAt(LocalDateTime placedAt) {

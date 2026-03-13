@@ -62,11 +62,29 @@ public class Customer extends User {
 
     public Customer(Long id, String email, String password,
                     String firstName, String lastName,
-                    Role role, AccountStatus accountStatus) {
-        super(id, email, password, firstName, lastName, role, accountStatus);
+                    Role role, AccountStatus accountStatus, String imgPath) {
+        super(id, email, password, firstName, lastName, role,imgPath , accountStatus);
     }
+    
 
-    // getters and setters
+    public Customer(Long id, String firstName, String lastName, String email, String password, Role role,
+			String imgPath, AccountStatus accountStatus, String mobile, LocalDate dateOfBirth, Gender gender,
+			String pan, String aadhar, String address, String bankAccount, String ifscCode, boolean termsAccepted,
+			boolean riskDisclosure) {
+		super(id, firstName, lastName, email, password, role, imgPath, accountStatus);
+		this.mobile = mobile;
+		this.dateOfBirth = dateOfBirth;
+		this.gender = gender;
+		this.pan = pan;
+		this.aadhar = aadhar;
+		this.address = address;
+		this.bankAccount = bankAccount;
+		this.ifscCode = ifscCode;
+		this.termsAccepted = termsAccepted;
+		this.riskDisclosure = riskDisclosure;
+	}
+
+	// getters and setters
     public String getMobile() { return mobile; }
     public void setMobile(String mobile) { this.mobile = mobile; }
 

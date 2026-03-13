@@ -52,7 +52,7 @@
       		out.print(msg);
       %>
       <!-- PERSONAL DETAILS -->
-      <form action="register" method="post">
+      <form action="register" method="post" enctype="multipart/form-data">
 
         <p class="section-tag mt-2">Personal Details</p>
         <div class="row g-2">
@@ -101,10 +101,14 @@
           <div class="col-6"><label class="form-label">IFSC Code *</label><input type="text" name="ifscCode" class="form-control" placeholder="HDFC0001234" required maxlength="11" oninput="this.value=this.value.toUpperCase()"/></div>
         </div>
 
-        <p class="section-tag mt-3">Password</p>
         <div class="row g-2">
           <div class="col-12"><label class="form-label">Password *</label>
           <input type="password" name="password" class="form-control" placeholder="Min 8 characters" required minlength="8"/></div>
+        </div>
+        
+        <div class="row g-2">
+          <div class="col-12"><label class="form-label">DP *</label>
+          <input type="file" name="dp" class="form-control" required/></div>
         </div>
 
         <div class="mt-3">

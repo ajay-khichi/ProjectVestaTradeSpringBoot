@@ -40,6 +40,8 @@ public abstract class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+    
+    private String imgPath;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -53,19 +55,22 @@ public abstract class User {
     // constructors
     public User() { super(); }
 
-    public User(Long id, String email, String password,
-                String firstName, String lastName,
-                Role role, AccountStatus accountStatus) {
-        this.id            = id;
-        this.email         = email;
-        this.password      = password;
-        this.firstName     = firstName;
-        this.lastName      = lastName;
-        this.role          = role;
-        this.accountStatus = accountStatus;
-    }
+    
 
-    // getters and setters
+    public User(Long id, String firstName, String lastName, String email, String password, Role role, String imgPath,
+			AccountStatus accountStatus) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+		this.role = role;
+		this.imgPath = imgPath;
+		this.accountStatus = accountStatus;
+	}
+
+	// getters and setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -86,4 +91,13 @@ public abstract class User {
 
     public AccountStatus getAccountStatus() { return accountStatus; }
     public void setAccountStatus(AccountStatus accountStatus) { this.accountStatus = accountStatus; }
+
+	public String getImgPath() {
+		return imgPath;
+	}
+
+	public void setImgPath(String imgPath) {
+		this.imgPath = imgPath;
+	}
+    
 }

@@ -17,8 +17,10 @@
 
 <div class="container py-5">
 <div class="d-grid gap-2 col-6 mx-auto">
+	<h2 class="heading">Stock Menu</h2>
   <a href="amdstock" class="btn btn-secondary btn-lg">Add / Update / Delete Stock</a>
-  <a href="getstock" class="btn btn-secondary btn-lg">Get Stock</a>
+  <a href="getstock" class="btn btn-secondary btn-lg">Get Stock</a><br><br>
+  <a href="adminhome" class="btn btn-info btn-lg">Back to Home</a><br>
 </div>
 </div>
 

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ignishers.daoimpl.OrderDaoImpl;
 import com.ignishers.daoimpl.StockDaoImpl;
 import com.ignishers.daoimpl.UserDaoImpl;
 import com.ignishers.enums.OrderType;
@@ -17,7 +18,7 @@ import com.ignishers.pojo.Customer;
 import com.ignishers.pojo.Order;
 import com.ignishers.pojo.Stock;
 import com.ignishers.pojo.User;
-import com.ignishers.repository.OrderRepository;
+import com.ignishers.pojo.Wallet;
 import com.ignishers.repository.WallerRepository;
 
 import jakarta.servlet.http.HttpSession;
@@ -26,6 +27,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import com.ignishers.pojo.PortfolioItem;
 
 @Controller
@@ -37,7 +39,7 @@ public class CustomerController {
 	public StockDaoImpl stockdao;
 
 	@Autowired
-	private OrderRepository orderRepository;
+	private OrderDaoImpl orderDao;
 
 	@Autowired
 	private WallerRepository walletRepository;
@@ -52,7 +54,7 @@ public class CustomerController {
 	public String orderHistoryPage(HttpSession session, Model model) {
 		User u = (User) session.getAttribute("user");
 		if (u != null && u instanceof Customer) {
-			List<Order> orders = orderRepository.findByCustomerId(u.getId());
+			List<Order> orders = orderDao.getOrdersByCustomerId(u.getId());
 			model.addAttribute("orders", orders);
 		}
 		return "orderhistory";		
@@ -62,7 +64,7 @@ public class CustomerController {
 	public String portfoliopage(HttpSession session, Model model) {
 		User u = (User) session.getAttribute("user");
 		if (u != null && u instanceof Customer) {
-			List<Order> orders = orderRepository.findByCustomerId(u.getId());
+			List<Order> orders = orderDao.getOrdersByCustomerId(u.getId());
 			
 			Map<String, PortfolioItem> portfolioMap = new HashMap<>();
 			for(Order o : orders) {
@@ -77,7 +79,7 @@ public class CustomerController {
 					item.setCurrentPrice(BigDecimal.ZERO);
 				}
 				
-				if(o.getOrderType() == com.ignishers.enums.OrderType.BUY) {
+				if(o.getOrderType() == OrderType.BUY) {
 					int newQty = item.getQuantity() + o.getQuantity();
 					BigDecimal totalCost = item.getAveragePrice().multiply(BigDecimal.valueOf(item.getQuantity()));
 					totalCost = totalCost.add(o.getTotalAmount());
@@ -85,7 +87,7 @@ public class CustomerController {
 						item.setAveragePrice(totalCost.divide(BigDecimal.valueOf(newQty), 2, RoundingMode.HALF_UP));
 					}
 					item.setQuantity(newQty);
-				} else if (o.getOrderType() == com.ignishers.enums.OrderType.SELL) {
+				} else if (o.getOrderType() == OrderType.SELL) {
 					item.setQuantity(item.getQuantity() - o.getQuantity());
 				}
 				portfolioMap.put(symbol, item);
@@ -116,9 +118,9 @@ public class CustomerController {
 	public String walletpage(HttpSession session, Model model) {
 		User u = (User) session.getAttribute("user");
 		if (u != null && u instanceof Customer) {
-			java.util.Optional<com.ignishers.pojo.Wallet> optWallet = walletRepository.findByCustomerId(u.getId());
-			com.ignishers.pojo.Wallet w = optWallet.orElseGet(() -> {
-				com.ignishers.pojo.Wallet newWallet = new com.ignishers.pojo.Wallet();
+			Optional<Wallet> optWallet = walletRepository.findByCustomerId(u.getId());
+			Wallet w = optWallet.orElseGet(() -> {
+				Wallet newWallet = new Wallet();
 				newWallet.setCustomerId(u.getId());
 				newWallet.setBalance(BigDecimal.ZERO);
 				return walletRepository.save(newWallet);
@@ -134,9 +136,9 @@ public class CustomerController {
 		if (u == null || !(u instanceof Customer)) {
 			return new ModelAndView("login", "msg", "Please login first");
 		}
-		java.util.Optional<com.ignishers.pojo.Wallet> optWallet = walletRepository.findByCustomerId(u.getId());
-		com.ignishers.pojo.Wallet w = optWallet.orElseGet(() -> {
-			com.ignishers.pojo.Wallet newWallet = new com.ignishers.pojo.Wallet();
+		Optional<Wallet> optWallet = walletRepository.findByCustomerId(u.getId());
+		Wallet w = optWallet.orElseGet(() -> {
+			Wallet newWallet = new Wallet();
 			newWallet.setCustomerId(u.getId());
 			newWallet.setBalance(BigDecimal.ZERO);
 			return newWallet;
@@ -155,9 +157,9 @@ public class CustomerController {
 		if (u == null || !(u instanceof Customer)) {
 			return new ModelAndView("login", "msg", "Please login first");
 		}
-		java.util.Optional<com.ignishers.pojo.Wallet> optWallet = walletRepository.findByCustomerId(u.getId());
-		com.ignishers.pojo.Wallet w = optWallet.orElseGet(() -> {
-			com.ignishers.pojo.Wallet newWallet = new com.ignishers.pojo.Wallet();
+		Optional<Wallet> optWallet = walletRepository.findByCustomerId(u.getId());
+		Wallet w = optWallet.orElseGet(() -> {
+			Wallet newWallet = new Wallet();
 			newWallet.setCustomerId(u.getId());
 			newWallet.setBalance(BigDecimal.ZERO);
 			return newWallet;
@@ -202,7 +204,7 @@ public class CustomerController {
 	@PostMapping("/trading")
 	public ModelAndView tradingpage(@RequestParam String symbol) {
 		Stock stk = stockdao.getStock(symbol);
-		return new org.springframework.web.servlet.ModelAndView("trading", "stock", stk);
+		return new ModelAndView("trading", "stock", stk);
 	}
 	
 	@PostMapping("/processTrade")
@@ -224,9 +226,9 @@ public class CustomerController {
 		
 		OrderType type = OrderType.valueOf(tradeType);
 		
-		java.util.Optional<com.ignishers.pojo.Wallet> optWallet = walletRepository.findByCustomerId(u.getId());
-		com.ignishers.pojo.Wallet wallet = optWallet.orElseGet(() -> {
-			com.ignishers.pojo.Wallet newWallet = new com.ignishers.pojo.Wallet();
+		Optional<Wallet> optWallet = walletRepository.findByCustomerId(u.getId());
+		Wallet wallet = optWallet.orElseGet(() -> {
+			Wallet newWallet = new Wallet();
 			newWallet.setCustomerId(u.getId());
 			newWallet.setBalance(BigDecimal.ZERO);
 			return walletRepository.save(newWallet);
@@ -241,7 +243,7 @@ public class CustomerController {
 				return mv;
 			}
 			if(stk.getAvailableShares() < quantity) {
-				ModelAndView mv = new org.springframework.web.servlet.ModelAndView("trading", "stock", stk);
+				ModelAndView mv = new ModelAndView("trading", "stock", stk);
 				mv.addObject("msg1", "Not enough shares available in market. Available: " + stk.getAvailableShares());
 				return mv;
 			}
@@ -252,7 +254,7 @@ public class CustomerController {
 			walletRepository.save(wallet);
 			
 		} else if (type == OrderType.SELL) {
-			List<Order> userOrders = orderRepository.findByCustomerId(u.getId());
+			List<Order> userOrders = orderDao.getOrdersByCustomerId(u.getId());
 			int heldQuantity = 0;
 			for(Order o : userOrders) {
 				if(o.getStockId().equals(symbol)) {
@@ -282,7 +284,12 @@ public class CustomerController {
 		order.setQuantity(quantity);
 		order.setPricePerShare(stk.getCurrentPrice());
 		
-		orderRepository.save(order);
+		orderDao.addOrder(order);
+//		--------sends mail-----
+		if(order.getOrderType().equals(OrderType.BUY))
+			MailSender.sendMailBuyStock(u, order);
+		else
+			MailSender.sendMailSellStock(u, order);
 		
 		ModelAndView mv = new ModelAndView("trading", "stock", stk);
 		mv.addObject("msg1", "Trade executed successfully!");
