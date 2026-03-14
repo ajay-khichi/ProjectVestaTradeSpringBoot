@@ -123,7 +123,6 @@ public class LoginController {
 	@PostMapping("/register")
 	public ModelAndView registerUser(Customer cst) throws Exception
 	{
-		
 		ModelAndView mv = null;
 		
 		

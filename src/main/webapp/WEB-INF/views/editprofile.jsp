@@ -30,11 +30,16 @@
              <div class="alert alert-info"><%=msg1%></div>
           <% } %>
 
-          <form action="/updateProfile" method="post">
+          <form action="/updateProfile" method="post" enctype="multipart/form-data">
             
             <div class="mb-3">
               <label for="password" class="form-label">New Password</label>
               <input type="password" class="form-control" name="password" id="password" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="password" class="form-label">Upload DP</label>
+              <input type="file" class="form-control" name="dp" id="password" required>
             </div>
             
             <div class="d-grid gap-2 mt-4">

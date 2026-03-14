@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ignishers.daoimpl.FundTransactionDaoImpl;
@@ -25,6 +26,9 @@ import com.ignishers.pojo.Wallet;
 import com.ignishers.repository.WallerRepository;
 
 import jakarta.servlet.http.HttpSession;
+
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -216,15 +220,23 @@ public class CustomerController {
 	}
 
 	@PostMapping("/updateProfile")
-	public ModelAndView updateProfile(HttpSession session, @RequestParam String password) {
+	public ModelAndView updateProfile(HttpSession session, 
+			@RequestParam("password") String password,
+			@RequestParam("dp") MultipartFile file ) throws IllegalStateException, IOException 
+	{
+		
 		User u = (User) session.getAttribute("user");
 		if (u == null || !(u instanceof Customer)) {
 			return new ModelAndView("login", "msg", "Please login first");
 		}
 		
 		u.setPassword(password);
-		userdao.updateUser(u);
+		u.setImgPath((String)file.getOriginalFilename());
 		
+		String path ="D:\\Project\\ProjectVestaTradeSpringBoot\\src\\main\\webapp\\dp\\";
+		File f = new File(path+file.getOriginalFilename());
+		if(userdao.updateUser(u))
+			file.transferTo(f);
 		session.setAttribute("user", u);
 		return new ModelAndView("editprofile", "msg", "Password updated successfully.");
 	}

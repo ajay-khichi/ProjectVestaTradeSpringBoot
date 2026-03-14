@@ -1,12 +1,7 @@
 <%@page import="com.ignishers.pojo.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%    
-    User isuser = (User) session.getAttribute("user");
-if(isuser==null){
-	response.sendRedirect("login");
-}
-%>
+
 <nav class="navbar navbar-expand-lg">
   <div class="container">
     <a class="navbar-brand" href="customerhome">Vesta<span>Trade</span></a>
@@ -23,6 +18,9 @@ if(isuser==null){
       <div class="d-flex gap-2 mt-2 mt-lg-0">
         <a href="logout" class="nav-link btn-login">Log Out</a>
       </div>
+      <div style="width: 55px; height: 55px; border-radius: 50%; background: linear-gradient(135deg, #051937 0%, #004d7a 100%); color: white; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 15px; font-weight: 700; line-height: 1.1; box-shadow: 0 4px 10px rgba(0,0,0,0.2); border: 2px solid white;">
+  			User
+		</div>
     </div>
   </div>
 </nav>
