@@ -3,13 +3,9 @@ package com.ignishers.daoimpl;
 import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import com.ignishers.controller.AdminController;
 import com.ignishers.dao.UserDao;
 import com.ignishers.pojo.User;
 import com.ignishers.repository.UserRepository;

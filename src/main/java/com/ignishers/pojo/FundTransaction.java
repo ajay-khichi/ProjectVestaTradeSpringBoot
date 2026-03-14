@@ -45,7 +45,7 @@ public class FundTransaction {
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
-        this.status    = FundStatus.PENDING;
+        this.status    = FundStatus.SUCCESS;
     }
 
 	public FundTransaction() {

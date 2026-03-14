@@ -50,7 +50,7 @@ public class MailSender {
 			message.setFrom(new InternetAddress(fromEmail));
 			
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(a.getEmail()));
-			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("ajaysinghkhichi5@gmail.com"));
+			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("karansinghkhichi4281@gmail.com"));
 			
 			
 			message.setSubject("Registration Initiated on VestraTrade");
@@ -96,7 +96,7 @@ public class MailSender {
 			message.setFrom(new InternetAddress(fromEmail));
 			
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(a.getEmail()));
-			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("ajaysinghkhichi5@gmail.com"));
+			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("karansinghkhichi4281@gmail.com"));
 			
 			
 			message.setSubject("Login Initiated on VestraTrade");
@@ -144,7 +144,7 @@ public static void sendMailAfterVerify(User a) {
 			message.setFrom(new InternetAddress(fromEmail));
 			
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(a.getEmail()));
-			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("ajaysinghkhichi5@gmail.com"));
+			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("karansinghkhichi4281@gmail.com"));
 			
 			
 			message.setSubject("Account Verified on VestraTrade");
@@ -193,7 +193,7 @@ public static void sendMailAfterVerify(User a) {
 			message.setFrom(new InternetAddress(fromEmail));
 			
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(a.getEmail()));
-			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("ajaysinghkhichi5@gmail.com"));
+			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("karansinghkhichi4281@gmail.com"));
 			
 			
 			message.setSubject("Account Rejected by VestraTrade");
@@ -238,7 +238,7 @@ public static void sendMailAfterVerify(User a) {
 				message.setFrom(new InternetAddress(fromEmail));
 				
 				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(a.getEmail()));
-				message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("ajaysinghkhichi5@gmail.com"));
+				message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("karansinghkhichi4281@gmail.com"));
 				
 				
 				message.setSubject("Alert! Suspicious Acitvity Detected");
@@ -282,13 +282,13 @@ public static void sendMailAfterVerify(User a) {
 				message.setFrom(new InternetAddress(fromEmail));
 				
 				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(a.getEmail()));
-				message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("ajaysinghkhichi5@gmail.com"));
+				message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("karansinghkhichi4281@gmail.com"));
 				
 				
 				message.setSubject("Amount Credited in Wallet");
 				String msg = "<p>Dear <strong>" + a.getFirstName()+",<br>"
 						+ "<p>This Mail is to Inform You That Your<strong> Amount is Credited on Your Wallet</strong>.</p>"
-						+ "<p>Transaction Amount: </p>" + trans.getAmount()
+						+ "<p>Transaction Amount: </p>&#8377; " + trans.getAmount()
 						+ "<p>Transaction Date: </p>" + trans.getCreatedAt()
 						+ "<p>Transaction Id: </p>" + trans.getId()
 						+ "<br><br><h2>Contact Us for more Information</h2><br><br><br>"
@@ -330,13 +330,13 @@ public static void sendMailAfterVerify(User a) {
 				message.setFrom(new InternetAddress(fromEmail));
 				
 				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(a.getEmail()));
-				message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("ajaysinghkhichi5@gmail.com"));
+				message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("karansinghkhichi4281@gmail.com"));
 				
 				
 				message.setSubject("Amount Debited from Wallet");
 				String msg = "<p>Dear <strong>" + a.getFirstName()+",<br>"
 						+ "<p>This Mail is to Inform You That Your<strong> Amount is Debited from Your Wallet</strong>.</p>"
-						+ "<p>Transaction Amount: </p>" + trans.getAmount()
+						+ "<p>Transaction Amount: </p>&#8377; " + trans.getAmount()
 						+ "<p>Transaction Date: </p>" + trans.getCreatedAt()
 						+ "<p>Transaction Id: </p>" + trans.getId()
 						+ "<br><br><h2>Contact Us for more Information</h2><br><br><br>"
@@ -378,7 +378,7 @@ public static void sendMailAfterVerify(User a) {
 				message.setFrom(new InternetAddress(fromEmail));
 				
 				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(a.getEmail()));
-				message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("ajaysinghkhichi5@gmail.com"));
+				message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("karansinghkhichi4281@gmail.com"));
 				
 				
 				message.setSubject("Stock Bought Successfully");
@@ -386,7 +386,7 @@ public static void sendMailAfterVerify(User a) {
 						+ "<p>This Mail is to Inform You That Your<strong> Stocks are Bought Successfully</strong>.</p>"
 						+ "<p>Stock Id: </p>" + order.getStockId()
 						+ "<p>Stock Quantity: </p>" + order.getQuantity()
-						+ "<p>Stock Amount: </p>" + order.getTotalAmount()
+						+ "<p>Stock Amount: </p>&#8377; " + order.getTotalAmount()
 						+ "<p>Stock Date: </p>" + order.getPlacedAt()
 						+ "<br><br><h2>Contact Us for more Information</h2><br><br><br>"
 						+ "<h1 style=\"color: #000080; font-weight: bold;\">Team Vesta<span style=\"color: #000; font-weight: normal;\">Trade</span></h1>";
@@ -427,7 +427,7 @@ public static void sendMailAfterVerify(User a) {
 			message.setFrom(new InternetAddress(fromEmail));
 			
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(a.getEmail()));
-			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("ajaysinghkhichi5@gmail.com"));
+			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("karansinghkhichi4281@gmail.com"));
 			
 			
 			message.setSubject("Stock Sold Successfully");
@@ -435,7 +435,7 @@ public static void sendMailAfterVerify(User a) {
 					+ "<p>This Mail is to Inform You That Your<strong> Stocks are Sold Successfully</strong>.</p>"
 					+ "<p>Stock Id: </p>" + order.getStockId()
 					+ "<p>Stock Quantity: </p>" + order.getQuantity()
-					+ "<p>Stock Amount: </p>" + order.getTotalAmount()
+					+ "<p>Stock Amount: </p>&#8377; " + order.getTotalAmount()
 					+ "<p>Stock Date: </p>" + order.getPlacedAt()
 					+ "<br><br><h2>Contact Us for more Information</h2><br><br><br>"
 					+ "<h1 style=\"color: #000080; font-weight: bold;\">Team Vesta<span style=\"color: #000; font-weight: normal;\">Trade</span></h1>";

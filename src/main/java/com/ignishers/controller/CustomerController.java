@@ -10,11 +10,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ignishers.daoimpl.FundTransactionDaoImpl;
 import com.ignishers.daoimpl.OrderDaoImpl;
 import com.ignishers.daoimpl.StockDaoImpl;
 import com.ignishers.daoimpl.UserDaoImpl;
+import com.ignishers.enums.FundType;
 import com.ignishers.enums.OrderType;
 import com.ignishers.pojo.Customer;
+import com.ignishers.pojo.FundTransaction;
 import com.ignishers.pojo.Order;
 import com.ignishers.pojo.Stock;
 import com.ignishers.pojo.User;
@@ -32,6 +35,7 @@ import com.ignishers.pojo.PortfolioItem;
 
 @Controller
 public class CustomerController {
+
 	@Autowired
 	private UserDaoImpl userdao;
 	
@@ -40,9 +44,13 @@ public class CustomerController {
 
 	@Autowired
 	private OrderDaoImpl orderDao;
+	
+	@Autowired
+	private FundTransactionDaoImpl ftdao;
 
 	@Autowired
 	private WallerRepository walletRepository;
+
 	
 	@GetMapping("/customerhome")
 	public String customerhomepage(Model model) {
@@ -131,7 +139,7 @@ public class CustomerController {
 	}
 
 	@GetMapping("/addFunds")
-	public ModelAndView addFunds(HttpSession session, @RequestParam("amount")BigDecimal amount) 
+	public ModelAndView addFunds(@RequestParam("amount") BigDecimal amount, HttpSession session) 
 	{
 		User u = (User) session.getAttribute("user");
 		if (u == null || !(u instanceof Customer)) {
@@ -147,13 +155,22 @@ public class CustomerController {
 		w.setBalance(w.getBalance().add(amount));
 		walletRepository.save(w);
 		
+		//add transaction to fund_transaction 
+		FundTransaction ft = new FundTransaction();
+		ft.setWalletId(w.getId());
+		ft.setFundType(FundType.DEPOSIT);
+		ft.setAmount(amount);
+		ftdao.addTransaction(ft);
+//		send mail when funds are Deposited
+		MailSender.sendMailDeposit(u, ft);
+		
 		ModelAndView mv = new ModelAndView("wallet", "msg", "Successfully added ₹" + amount + " to wallet.");
 		mv.addObject("wallet", w);
 		return mv;
 	}
 
 	@PostMapping("/withdrawFunds")
-	public ModelAndView withdrawFunds(HttpSession session, @RequestParam(value="amount", required=false, defaultValue="0") BigDecimal amount) {
+	public ModelAndView withdrawFunds(HttpSession session, @RequestParam BigDecimal amount) {
 		User u = (User) session.getAttribute("user");
 		if (u == null || !(u instanceof Customer)) {
 			return new ModelAndView("login", "msg", "Please login first");
@@ -175,6 +192,15 @@ public class CustomerController {
 		w.setBalance(w.getBalance().subtract(amount));
 		walletRepository.save(w);
 		
+		//add transaction to fund_transaction 
+				FundTransaction ft = new FundTransaction();
+				ft.setWalletId(w.getId());
+				ft.setFundType(FundType.WITHDRAWAL);
+				ft.setAmount(amount);
+				ftdao.addTransaction(ft);
+//				send mail when funds are withdrawn
+				MailSender.sendMailWithDraw(u, ft);
+		
 		ModelAndView mv = new ModelAndView("wallet", "msg", "Successfully withdrew ₹" + amount + " from wallet.");
 		mv.addObject("wallet", w);
 		return mv;
@@ -190,7 +216,7 @@ public class CustomerController {
 	}
 
 	@PostMapping("/updateProfile")
-	public ModelAndView updateProfile(HttpSession session, @RequestParam("password") String password) {
+	public ModelAndView updateProfile(HttpSession session, @RequestParam String password) {
 		User u = (User) session.getAttribute("user");
 		if (u == null || !(u instanceof Customer)) {
 			return new ModelAndView("login", "msg", "Please login first");
@@ -210,9 +236,9 @@ public class CustomerController {
 	
 	@PostMapping("/processTrade")
 	public ModelAndView processTrade(
-			@RequestParam("symbol") String symbol,
-			@RequestParam("quantity") Integer quantity,
-			@RequestParam("tradeType") String tradeType,
+			@RequestParam String symbol,
+			@RequestParam Integer quantity,
+			@RequestParam String tradeType,
 			HttpSession session) {
 		
 		User u = (User) session.getAttribute("user");

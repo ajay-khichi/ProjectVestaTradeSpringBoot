@@ -54,7 +54,7 @@ public class Order {
     @PrePersist
     protected void onCreate() {
         this.placedAt    = LocalDateTime.now();
-        this.orderStatus = OrderStatus.PENDING;
+        this.orderStatus = OrderStatus.EXECUTED;
         this.totalAmount = pricePerShare
                             .multiply(BigDecimal.valueOf(quantity));
     }
