@@ -23,12 +23,15 @@ if(isadmin==null){
         <li class="nav-item"><a class="nav-link" href="editcustomers">Customers</a></li>
       </ul>
 
-      <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
+      <!-- Right Side -->
+      <div class="d-flex align-items-center gap-3 ms-auto">
+
         <a href="logout" class="nav-link btn-login">Log Out</a>
-        
-        <div style="width: 55px; height: 55px; border-radius: 50%; background: linear-gradient(135deg, #ff6a00, #ee0979); color: white; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 15px; font-weight: 700; line-height: 1.1; box-shadow: 0 4px 10px rgba(0,0,0,0.2); border: 2px solid white;">
-  			Admin
-		</div>
+        <!-- Profile Image -->
+        <img src="/dp/<%=isadmin.getImgPath()%>" 
+             alt="Profile"
+             style="width:45px;height:45px;border-radius:50%;object-fit:cover;border:2px solid white;">
+      </div>
     </div>
   </div>
 </nav>
