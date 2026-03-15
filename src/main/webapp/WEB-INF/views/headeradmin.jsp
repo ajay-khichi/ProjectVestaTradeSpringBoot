@@ -39,7 +39,7 @@ if(isadmin==null){
       <div class="col-lg-5">
         <h1>
 			<%
-      	String msg = (String)request.getAttribute("welcome");
+      	String msg = (String)session.getAttribute("welcome");
       	if(msg!=null)
       		out.print(msg);
       %>

@@ -1,26 +1,44 @@
 <%@page import="com.ignishers.pojo.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<%
+User isadmin = (User) session.getAttribute("user");
+if(isadmin==null){
+	response.sendRedirect("login");
+}
+%>  
 <nav class="navbar navbar-expand-lg">
   <div class="container">
+
+    <!-- Brand -->
     <a class="navbar-brand" href="customerhome">Vesta<span>Trade</span></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav"><i class="bi bi-list"></i></button>
+
+    <!-- Mobile Toggle -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+        <i class="bi bi-list"></i>
+    </button>
+
     <div class="collapse navbar-collapse" id="nav">
+
+      <!-- Center Menu -->
       <ul class="navbar-nav mx-auto gap-1">
         <li class="nav-item"><a class="nav-link active" href="customerhome">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="portfolio">Portfolio</a></li>
         <li class="nav-item"><a class="nav-link" href="wallet">Wallet</a></li>
         <li class="nav-item"><a class="nav-link" href="orderhistory">Order History</a></li>
         <li class="nav-item"><a class="nav-link" href="editprofile">Edit Profile</a></li>
-
       </ul>
-      <div class="d-flex gap-2 mt-2 mt-lg-0">
+
+      <!-- Right Side -->
+      <div class="d-flex align-items-center gap-3 ms-auto">
+
         <a href="logout" class="nav-link btn-login">Log Out</a>
+        <!-- Profile Image -->
+        <img src="/dp/<%=isadmin.getImgPath()%>" 
+             alt="Profile"
+             style="width:45px;height:45px;border-radius:50%;object-fit:cover;border:2px solid white;">
       </div>
-      <div style="width: 55px; height: 55px; border-radius: 50%; background: linear-gradient(135deg, #051937 0%, #004d7a 100%); color: white; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 15px; font-weight: 700; line-height: 1.1; box-shadow: 0 4px 10px rgba(0,0,0,0.2); border: 2px solid white;">
-  			User
-		</div>
+
     </div>
   </div>
 </nav>
@@ -31,7 +49,7 @@
       <div class="col-lg-5">
         <h1>
 			<%
-      	String msg = (String)request.getAttribute("welcome");
+      	String msg = (String)session.getAttribute("welcome");
       	if(msg!=null)
       		out.print(msg);
       %>

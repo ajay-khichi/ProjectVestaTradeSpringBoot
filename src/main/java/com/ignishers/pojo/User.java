@@ -41,7 +41,7 @@ public abstract class User {
     @Column(nullable = false)
     private Role role;
     
-    private String imgPath;
+    private String imgPath="defaultImage.png";
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -50,6 +50,7 @@ public abstract class User {
     @PrePersist
     protected void onCreate() {
         this.accountStatus = AccountStatus.PENDING;
+        
     }
 
     // constructors

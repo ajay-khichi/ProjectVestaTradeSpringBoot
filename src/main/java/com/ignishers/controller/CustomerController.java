@@ -25,6 +25,7 @@ import com.ignishers.pojo.User;
 import com.ignishers.pojo.Wallet;
 import com.ignishers.repository.WallerRepository;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.File;
@@ -219,27 +220,47 @@ public class CustomerController {
 		return "editprofile";		
 	}
 
-	@PostMapping("/updateProfile")
-	public ModelAndView updateProfile(HttpSession session, 
-			@RequestParam("password") String password,
-			@RequestParam("dp") MultipartFile file ) throws IllegalStateException, IOException 
+	@PostMapping("/updatePassword")
+	public ModelAndView updatePassword(HttpSession session,
+			@RequestParam("password") String password)
 	{
-		
 		User u = (User) session.getAttribute("user");
 		if (u == null || !(u instanceof Customer)) {
 			return new ModelAndView("login", "msg", "Please login first");
 		}
-		
+
 		u.setPassword(password);
-		u.setImgPath((String)file.getOriginalFilename());
-		
-		String path ="D:\\Project\\ProjectVestaTradeSpringBoot\\src\\main\\webapp\\dp\\";
-		File f = new File(path+file.getOriginalFilename());
-		if(userdao.updateUser(u))
-			file.transferTo(f);
+		userdao.updateUser(u);
 		session.setAttribute("user", u);
-		return new ModelAndView("editprofile", "msg", "Password updated successfully.");
+		return new ModelAndView("editprofile", "pwdMsg", "Password updated successfully.");
 	}
+
+	@PostMapping("/updateDP")
+	public ModelAndView updateDP(HttpSession session,
+			@RequestParam("dp") MultipartFile file,
+			HttpServletRequest request) throws IllegalStateException, IOException
+	{
+		User u = (User) session.getAttribute("user");
+		if (u == null || !(u instanceof Customer)) {
+			return new ModelAndView("login", "msg", "Please login first");
+		}
+
+		if (file.isEmpty()) {
+			return new ModelAndView("editprofile", "dpMsg", "Please select an image to upload.");
+		}
+
+		u.setImgPath(file.getOriginalFilename());
+		String uploadDir = request.getServletContext().getRealPath("/dp/");
+		File dir = new File(uploadDir);
+		if (!dir.exists()) dir.mkdirs();
+		File f = new File(uploadDir + file.getOriginalFilename());
+		file.transferTo(f);
+
+		userdao.updateUser(u);
+		session.setAttribute("user", u);
+		return new ModelAndView("editprofile", "dpMsg", "Profile picture updated successfully.");
+	}
+
 	@PostMapping("/trading")
 	public ModelAndView tradingpage(@RequestParam String symbol) {
 		Stock stk = stockdao.getStock(symbol);

@@ -97,14 +97,16 @@ public class LoginController {
 		if(u!=null) {
 			if(u.getRole().equals(Role.ADMIN)) {
 				session.setAttribute("user", u);
-				mv = new ModelAndView("adminhome", "welcome", "Welcome Admin");
+				session.setAttribute("welcome", "Welcome Admin");
+				mv = new ModelAndView("adminhome");
 				mv.addObject("stocks", lst);
 			}
 			if(u.getRole().equals(Role.CUSTOMER)) {
 				if(u.getAccountStatus().equals(AccountStatus.VERIFIED)) {
 					session.setAttribute("user", u);
+					session.setAttribute("welcome","Welcome " + u.getFirstName());
 					MailSender.sendMailLoginAlert(u);
-					mv = new ModelAndView("customerhome", "welcome", "Welcome User");
+					mv = new ModelAndView("customerhome");
 					mv.addObject("stocks", lst);
 				}
 				if(u.getAccountStatus().equals(AccountStatus.PENDING))
