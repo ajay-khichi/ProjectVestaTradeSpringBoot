@@ -124,6 +124,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>vestatrade</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
