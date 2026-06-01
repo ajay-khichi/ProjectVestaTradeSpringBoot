@@ -24,6 +24,9 @@ jobs:
     - name: Build JAR
       run: mvn -B package -DskipTests --file pom.xml
 
+    - name: Find JAR
+      run: find . -name "*.jar" -not -path "*/repository/*"
+
     - name: Setup SSH Key
       run: |
         mkdir -p ~/.ssh
