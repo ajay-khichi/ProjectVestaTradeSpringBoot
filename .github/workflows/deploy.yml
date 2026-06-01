@@ -31,9 +31,10 @@ jobs:
         username: ${{ secrets.DO_USER }}
         key: ${{ secrets.DO_SSH_KEY }}
         port: ${{ secrets.DO_PORT }}
+        script_stop: false
         script: |
           mkdir -p /opt/vestatrade
-          PID=$(pgrep -f vestatrade) && kill $PID || echo "No process running"
+          pkill -f vestatrade || true
           sleep 2
 
     - name: Upload JAR
