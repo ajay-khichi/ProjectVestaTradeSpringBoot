@@ -27,13 +27,9 @@ jobs:
     - name: Setup SSH Key
       run: |
         mkdir -p ~/.ssh
-        echo "${{ secrets.DO_SSH_KEY }}" | base64 -d > ~/.ssh/github_actions
+        echo "${{ secrets.DO_SSH_KEY }}" > ~/.ssh/github_actions
         chmod 600 ~/.ssh/github_actions
         ssh-keyscan -H ${{ secrets.DO_HOST }} >> ~/.ssh/known_hosts
-        echo "=== Key first line ==="
-        head -1 ~/.ssh/github_actions
-        echo "=== Key line count ==="
-        wc -l ~/.ssh/github_actions
 
     - name: Stop existing app
       run: |
