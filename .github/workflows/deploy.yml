@@ -1,0 +1,71 @@
+name: Build and Deploy VestaTrade
+
+on:
+  push:
+    branches: [ "main" ]
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Build JAR
+      run: mvn -B package -DskipTests --file pom.xml
+
+    - name: Stop existing app
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.DO_HOST }}
+        username: ${{ secrets.DO_USER }}
+        key: ${{ secrets.DO_SSH_KEY }}
+        port: ${{ secrets.DO_PORT }}
+        script: |
+          mkdir -p /opt/vestatrade
+          pkill -f vestatrade || true
+          sleep 2
+
+    - name: Upload JAR
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.DO_HOST }}
+        username: ${{ secrets.DO_USER }}
+        key: ${{ secrets.DO_SSH_KEY }}
+        port: ${{ secrets.DO_PORT }}
+        source: "target/*.jar"
+        target: "/opt/vestatrade/"
+        strip_components: 1
+
+    - name: Start Application
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.DO_HOST }}
+        username: ${{ secrets.DO_USER }}
+        key: ${{ secrets.DO_SSH_KEY }}
+        port: ${{ secrets.DO_PORT }}
+        envs: DB_URL,DB_USERNAME,DB_PASSWORD,SERVER_PORT
+        script: |
+          cd /opt/vestatrade
+          nohup java -jar *.jar \
+            --server.port=$SERVER_PORT \
+            --spring.datasource.url=$DB_URL \
+            --spring.datasource.username=$DB_USERNAME \
+            --spring.datasource.password=$DB_PASSWORD \
+            > app.log 2>&1 &
+          echo "VestaTrade started!"
+      env:
+        DB_URL: ${{ secrets.DB_URL }}
+        DB_USERNAME: ${{ secrets.DB_USERNAME }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        SERVER_PORT: ${{ secrets.SERVER_PORT }}
