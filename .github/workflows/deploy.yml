@@ -33,10 +33,10 @@ jobs:
 
     - name: Stop existing app
       run: |
-        ssh -i ~/.ssh/id_ed25519 -p ${{ secrets.DO_PORT }} \
+        ssh -vvv -i ~/.ssh/id_ed25519 -p ${{ secrets.DO_PORT }} \
           -o StrictHostKeyChecking=no \
           ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} \
-          "mkdir -p /opt/vestatrade && pkill -f vestatrade || true && sleep 2"
+          "mkdir -p /opt/vestatrade && pkill -f vestatrade || true && sleep 2" 2>&1 || true
 
     - name: Upload JAR
       run: |
