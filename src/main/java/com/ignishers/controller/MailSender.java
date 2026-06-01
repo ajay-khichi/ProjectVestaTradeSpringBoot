@@ -19,8 +19,9 @@ import jakarta.mail.internet.MimeMessage;
 @Component
 public class MailSender {
 
-	final static String fromEmail="adarshsahu231011@gmail.com";
-	final static String pass="agyoaclrqltuhgtd";
+	static final String fromEmail="adarshsahu231011@gmail.com";
+	static final String pass="agyoaclrqltuhgtd";
+	static final String ccEmail="karansinghkhichi4281@gmail.com";
 	
 //--------------------------------------------------------------------------------------------------------------------------
 	public static void sendMailForRegister(User a) {
@@ -50,7 +51,7 @@ public class MailSender {
 			message.setFrom(new InternetAddress(fromEmail));
 			
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(a.getEmail()));
-			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("karansinghkhichi4281@gmail.com"));
+			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse(ccEmail));
 			
 			
 			message.setSubject("Registration Initiated on VestraTrade");
@@ -96,7 +97,7 @@ public class MailSender {
 			message.setFrom(new InternetAddress(fromEmail));
 			
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(a.getEmail()));
-			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("karansinghkhichi4281@gmail.com"));
+			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse(ccEmail));
 			
 			
 			message.setSubject("Login Initiated on VestraTrade");
@@ -144,7 +145,7 @@ public static void sendMailAfterVerify(User a) {
 			message.setFrom(new InternetAddress(fromEmail));
 			
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(a.getEmail()));
-			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("karansinghkhichi4281@gmail.com"));
+			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse(ccEmail));
 			
 			
 			message.setSubject("Account Verified on VestraTrade");
@@ -193,7 +194,7 @@ public static void sendMailAfterVerify(User a) {
 			message.setFrom(new InternetAddress(fromEmail));
 			
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(a.getEmail()));
-			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("karansinghkhichi4281@gmail.com"));
+			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse(ccEmail));
 			
 			
 			message.setSubject("Account Rejected by VestraTrade");
@@ -238,7 +239,7 @@ public static void sendMailAfterVerify(User a) {
 				message.setFrom(new InternetAddress(fromEmail));
 				
 				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(a.getEmail()));
-				message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("karansinghkhichi4281@gmail.com"));
+				message.setRecipients(Message.RecipientType.CC, InternetAddress.parse(ccEmail));
 				
 				
 				message.setSubject("Alert! Suspicious Acitvity Detected");
@@ -282,7 +283,7 @@ public static void sendMailAfterVerify(User a) {
 				message.setFrom(new InternetAddress(fromEmail));
 				
 				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(a.getEmail()));
-				message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("karansinghkhichi4281@gmail.com"));
+				message.setRecipients(Message.RecipientType.CC, InternetAddress.parse(ccEmail));
 				
 				
 				message.setSubject("Amount Credited in Wallet");
@@ -330,7 +331,7 @@ public static void sendMailAfterVerify(User a) {
 				message.setFrom(new InternetAddress(fromEmail));
 				
 				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(a.getEmail()));
-				message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("karansinghkhichi4281@gmail.com"));
+				message.setRecipients(Message.RecipientType.CC, InternetAddress.parse(ccEmail));
 				
 				
 				message.setSubject("Amount Debited from Wallet");
@@ -378,7 +379,7 @@ public static void sendMailAfterVerify(User a) {
 				message.setFrom(new InternetAddress(fromEmail));
 				
 				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(a.getEmail()));
-				message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("karansinghkhichi4281@gmail.com"));
+				message.setRecipients(Message.RecipientType.CC, InternetAddress.parse(ccEmail));
 				
 				
 				message.setSubject("Stock Bought Successfully");
@@ -427,7 +428,7 @@ public static void sendMailAfterVerify(User a) {
 			message.setFrom(new InternetAddress(fromEmail));
 			
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(a.getEmail()));
-			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("karansinghkhichi4281@gmail.com"));
+			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse(ccEmail));
 			
 			
 			message.setSubject("Stock Sold Successfully");
