@@ -1,0 +1,51 @@
+name: Deploy VestaTrade to Droplet
+
+on:
+  push:
+    branches:
+      - main # Agar tumhari branch 'master' hai, toh yahan master kar dena
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Build WAR with Maven
+      run: mvn clean package -DskipTests
+
+    - name: Copy WAR file to Droplet
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.DO_HOST }}
+        username: ${{ secrets.DO_USER }}
+        key: ${{ secrets.DO_SSH_KEY }}
+        source: "target/vestatrade.war"
+        target: "/tmp/"
+
+    - name: Deploy to Tomcat & Restart
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.DO_HOST }}
+        username: ${{ secrets.DO_USER }}
+        key: ${{ secrets.DO_SSH_KEY }}
+        script: |
+          # Puraani files remove karo
+          sudo rm -rf /opt/tomcat10/webapps/vestatrade*
+          
+          # Nayi WAR file copy karo
+          sudo cp /tmp/target/vestatrade.war /opt/tomcat10/webapps/
+          
+          # Tomcat restart karo
+          sudo sh /opt/tomcat10/bin/shutdown.sh
+          sleep 5
+          sudo sh /opt/tomcat10/bin/startup.sh
