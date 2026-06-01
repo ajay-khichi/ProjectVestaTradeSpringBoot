@@ -33,7 +33,7 @@ jobs:
         port: ${{ secrets.DO_PORT }}
         script: |
           mkdir -p /opt/vestatrade
-          pkill -f vestatrade || true
+          PID=$(pgrep -f vestatrade) && kill $PID || echo "No process running"
           sleep 2
 
     - name: Upload JAR
