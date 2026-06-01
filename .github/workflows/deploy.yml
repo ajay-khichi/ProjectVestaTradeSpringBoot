@@ -55,4 +55,12 @@ jobs:
             --spring.datasource.url=${{ secrets.DB_URL }} \
             --spring.datasource.username=${{ secrets.DB_USERNAME }} \
             --spring.datasource.password=${{ secrets.DB_PASSWORD }} \
-            > app.log 2>&1 &"
+            > app.log 2>&1 & echo 'VestaTrade started!'"
+
+    - name: Verify Deployment
+      run: |
+        sleep 15
+        ssh -i ~/.ssh/id_ed25519 -p ${{ secrets.DO_PORT }} \
+          -o StrictHostKeyChecking=no \
+          ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} \
+          "pgrep -f vestatrade && echo 'App is running!' || echo 'App failed to start!'"
